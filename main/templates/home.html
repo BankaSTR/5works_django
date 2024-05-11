@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="filter-section">
+    <h3>Фильтрация</h3>
+    <ul class="d-flex">
+        <li class="list-group-item"><a href="{% url 'main' %}" {% if not selected_category %} class="active"{% endif %}>Все категории</a></li>
+        {% for category in categories %}
+            <li class="ms-3 list-group-item"><a href="{% url 'main' %}?category={{ category.id }}" {% if selected_category == category.id|stringformat:"s" %} class="active"{% endif %}>{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="sorting-section">
+    <h3>Сортировка</h3>
+    <ul class="d-flex">
+        <li class="list-group-item"><a href="{% url 'main' %}?{% if selected_category %}category={{ selected_category }}&{% endif %}sort_by=title{% if sort_by == 'title' %}&direction={{ direction }}{% endif %}">По названию</a></li>
+        <li class="ms-3 list-group-item"><a href="{% url 'main' %}?{% if selected_category %}category={{ selected_category }}&{% endif %}sort_by=price{% if sort_by == 'price' %}&direction={{ direction }}{% endif %}">По цене</a></li>
+        <li class="ms-3 list-group-item"><a href="{% url 'main' %}?{% if selected_category %}category={{ selected_category }}&{% endif %}sort_by=manufacture_year{% if sort_by == 'manufacture_year' %}&direction={{ direction }}{% endif %}">По году производства</a></li>
+    </ul>
+</div>
+<div class="cards-wrapper">
+    {% for product in products %}
+    <div class="card">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}">
+        <div class="card-body">
+            <h5 class="card-title">{{ product.title }}</h5>
+            <p class="card-text">{{ product.price }} ₽</p>
+            <div class="card-bottom">
+                <div class="cb_btn">
+                    {% if product.availability > 0 %}
+                    <a href="{% url 'add' product.id %}">
+                        <img class='d-flex' src="{% static 'images/cart1.png' %}" alt="cart">
+                    </a>
+                    {% else %}
+                        <p>Извините, этот товар временно недоступен.</p>
+                    {% endif %}
+                </div>
+                <div class="cb_btn">
+                    <a href="{% url 'product_detail' product.id %}">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

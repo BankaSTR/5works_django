@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <p>
+        <img src="{{ product.image.url }}" class='card-img-top card' alt="{{ product.title }} img">
+    </p>
+    <p>{{ product.title }}</p>
+    <p>Цена: {{ product.price }}</p>
+    <p>Страна производитель: {{ product.country }}</p>
+    <p>Год выпуска: {{ product.manufacture_year }}</p>
+    <p>Модель: {{ product.model }}</p>
+    {% if product.availability > 0 %}
+        <a href="{% url 'add' product.id %}">Добавить в корзину</a>
+    {% else %}
+        <p>Извините, этот товар временно недоступен.</p>
+    {% endif %}
+</div>
+{% endblock %}

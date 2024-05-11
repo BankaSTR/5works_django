@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="cart-card-wrapper">
+    {% for product in items %}
+    <div class="cart-card">
+        <img src="{{ product.prodcut.image.url }}" class="cart-img" alt="...">
+        <div class="card-body">
+            <h3 class="card-title">{{ product.prodcut.title }}</h3>
+            <p class="card-text">{{ product.prodcut.price }} ₽ </p>
+        </div>
+        <div class="card-counter">
+            <a href="{% url 'decrease' basket.id product.prodcut.id %}"><button>-</button></a>
+            {{ product.quantity }}
+            {% if product.quantity < product.prodcut.availability %}
+                <a href="{% url 'increase' basket.id product.prodcut.id %}"><button>+</button></a>
+            {% else %}
+                <p>Извините, это максимальное количество товара.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if items.count > 0 %}
+<button class="btn"><a href="{% url 'checkout' %}">сформировать заказ</a></button>
+{% else %}
+ваша корзина пуста
+{% endif %}
+{% endblock %}
